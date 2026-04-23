@@ -3,11 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import cvxpy as cp
-import yfinance as yf
 
 from basic_optim import univers, MarkowitzOptimizer
 
-Path = r"C:\Eliott\154-capital\MEMOIRE\DATA\univers.xlsx"
+Path          = r"C:\Eliott\154-capital\MEMOIRE\DATA\univers.xlsx"
 Path_onedrive = r"C:\Users\TONY B\OneDrive\Eliott\Eliott_dossier\154-capital\univers.xlsx"
 
 WINDOW    = 252
@@ -32,19 +31,11 @@ def equal_weights(n):
     return np.ones(n) / n
 
 
-def load_spy(start, end):
-    spy = yf.download(BENCHMARK, start=start, end=end, progress=False, auto_adjust=True)
-    r = spy['Close'].pct_change().dropna()
-    r.index = pd.to_datetime(r.index).tz_localize(None)
-    return r
-
-
 def run_backtest(returns):
-    dates = returns.index
-    n     = returns.shape[1]
-
-    spy_raw   = load_spy(dates[0], dates[-1])
-    spy_align = spy_raw.reindex(dates).fillna(0)
+    spy_align = returns[BENCHMARK]
+    returns   = returns.drop(columns=[BENCHMARK])
+    dates     = returns.index
+    n         = returns.shape[1]
 
     records = []
 
@@ -58,7 +49,7 @@ def run_backtest(returns):
 
         w_mv   = min_variance_weights(estimation)
         w_ew   = equal_weights(n)
-        w_univ = equal_weights(n)  # benchmark univers = EW figé, sans rebalancement dynamique
+        w_univ = equal_weights(n)
 
         for j, date in enumerate(oos.index):
             r = oos.iloc[j].values
@@ -66,7 +57,7 @@ def run_backtest(returns):
                 'date': date,
                 'MV':   float(w_mv @ r),
                 'EW':   float(w_ew @ r),
-                'SPY':  float(spy_align.loc[date]) if date in spy_align.index else 0.0,
+                'SPY':  float(spy_align.loc[date]),
                 'UNIV': float(w_univ @ r),
             })
 
@@ -76,29 +67,31 @@ def run_backtest(returns):
 
 
 def metrics(returns_series):
-    r       = returns_series.dropna()
-    ann_ret = r.mean() * 252
-    ann_vol = r.std()  * np.sqrt(252)
-    sharpe  = ann_ret / ann_vol
-    cumul   = (1 + r).cumprod()
+    r        = returns_series.dropna()
+    ann_ret  = r.mean() * 252
+    ann_vol  = r.std()  * np.sqrt(252)
+    sharpe   = ann_ret / ann_vol
+    cumul    = (1 + r).cumprod()
     drawdown = cumul / cumul.cummax() - 1
-    max_dd  = drawdown.min()
+    max_dd   = drawdown.min()
     return {
-        'Rendement annualisé':  f"{ann_ret*100:.2f}%",
+        'Rendement annualisé':   f"{ann_ret*100:.2f}%",
         'Volatilité annualisée': f"{ann_vol*100:.2f}%",
-        'Sharpe':               f"{sharpe:.2f}",
-        'Max Drawdown':         f"{max_dd*100:.2f}%",
+        'Sharpe':                f"{sharpe:.2f}",
+        'Max Drawdown':          f"{max_dd*100:.2f}%",
     }
 
 
 def plot_matrices(returns, daily_ret):
-    opt      = MarkowitzOptimizer(returns.iloc[-WINDOW:])
-    res      = opt.optimization()
-    w        = res['weights']
-    active   = w > 1e-4
-    tickers  = returns.columns[active]
-    ret_sub  = returns[tickers].iloc[-WINDOW:]
-    cov_mat  = ret_sub.cov() * 252
+    import seaborn as sns
+
+    opt     = MarkowitzOptimizer(returns.iloc[-WINDOW:])
+    res     = opt.optimization()
+    w       = res['weights']
+    active  = w > 1e-4
+    tickers = returns.columns[active]
+    ret_sub = returns[tickers].iloc[-WINDOW:]
+    cov_mat = ret_sub.cov() * 252
     corr_mat = ret_sub.corr()
 
     print(f"\n--- Actifs sélectionnés par Min Variance : {len(tickers)} / {len(returns.columns)} ---")
@@ -121,7 +114,6 @@ def plot_matrices(returns, daily_ret):
     print("\n--- Corrélation entre stratégies ---")
     print(corr_strats.to_string())
 
-    import seaborn as sns
     fig, axes = plt.subplots(1, 2, figsize=(18, 7))
     fig.patch.set_facecolor('#0F172A')
 
@@ -148,11 +140,9 @@ def plot_matrices(returns, daily_ret):
     plt.show()
 
     # Corrélation entre stratégies
-
     fig2, ax2 = plt.subplots(figsize=(7, 6))
     fig2.patch.set_facecolor('#0F172A')
     ax2.set_facecolor('#1E293B')
-    import seaborn as sns
     sns.heatmap(
         corr_strats, ax=ax2, annot=True, fmt=".3f",
         cmap='RdYlGn', vmin=-1, vmax=1,
@@ -209,7 +199,7 @@ def plot_backtest(cumul):
 
 if __name__ == "__main__":
     print("Chargement des données...")
-    assets, dates, returns = univers(Path)
+    assets, dates, returns = univers(Path_onedrive)
     print(f"  {len(assets)} actifs | {dates[0].date()} → {dates[-1].date()}")
 
     print("Backtest en cours...")
