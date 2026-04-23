@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 
 Path = r"C:\Eliott\154-capital\MEMOIRE\DATA\univers.xlsx"
+Path_onedrive = r"C:\Users\TONY B\OneDrive\Eliott\Eliott_dossier\154-capital\univers.xlsx"
 
 def univers(Path):
     df = pd.read_excel(Path,index_col=0, parse_dates=True)

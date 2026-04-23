@@ -8,6 +8,7 @@ import yfinance as yf
 from basic_optim import univers, MarkowitzOptimizer
 
 Path = r"C:\Eliott\154-capital\MEMOIRE\DATA\univers.xlsx"
+Path_onedrive = r"C:\Users\TONY B\OneDrive\Eliott\Eliott_dossier\154-capital\univers.xlsx"
 
 WINDOW    = 252
 REBAL     = 21
