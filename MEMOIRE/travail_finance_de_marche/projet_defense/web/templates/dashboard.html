@@ -42,14 +42,14 @@
             src="/charts/fundamental/news_global.html"></iframe>
   </div>
 
-  <!-- BOTTOM LEFT — NAV -->
+  <!-- BOTTOM LEFT — NAV / Optimisation -->
   <div class="panel" id="panel-nav">
     <div class="panel-header">
-      <span class="panel-title">NAV base 100 (placeholder)</span>
+      <span class="panel-title">NAV — Optimisation</span>
       <button class="expand-btn" onclick="openOverlay('nav')">&#x26F6;</button>
     </div>
     <iframe class="panel-iframe" id="iframe-nav"
-            src="/charts/quantitative/nav_base100.html"></iframe>
+            src="/charts/quantitative/nav_optimised.html"></iframe>
   </div>
 
   <!-- BOTTOM CENTER — Technical -->
@@ -162,10 +162,18 @@ const CHARTS = {
     hasType: false,
   },
   nav: {
-    label: "NAV base 100",
-    path: () => `/charts/quantitative/nav_base100.html`,
+    label: "NAV — Optimisation",
+    types: [
+      { id: "nav_optimised",    label: "NAV base 100 (portfolios)"  },
+      { id: "optim_pie_minvar", label: "Pie — Variance minimale"    },
+      { id: "optim_pie_sharpe", label: "Pie — Sharpe maximum"       },
+      { id: "optim_frontier",   label: "Frontiere efficiente"        },
+      { id: "optim_metrics",    label: "Metriques"                  },
+      { id: "nav_base100",      label: "Base 100 (15 ans)"          },
+    ],
+    path: (type) => `/charts/quantitative/${type}.html`,
     hasCompany: false,
-    hasType: false,
+    hasType: true,
   },
 };
 </script>

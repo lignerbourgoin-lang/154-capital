@@ -60,6 +60,19 @@ def run_analysis():
     return jsonify({"ok": True})
 
 
+@app.route("/run-optimisation", methods=["POST"])
+def run_optimisation():
+    """Execute only the optimisation script then return success JSON."""
+    script = ROOT / "analysis" / "optimisation.py"
+    result = subprocess.run(
+        [sys.executable, str(script)],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        return jsonify({"ok": False, "error": result.stderr}), 500
+    return jsonify({"ok": True})
+
+
 @app.route("/charts/<category>/<filename>")
 def serve_chart(category: str, filename: str):
     path = CHARTS_DIR / category / filename

@@ -51,9 +51,13 @@
 
     #btn-optimisation {
       background: transparent;
-      color: #555;
-      border-color: #333;
-      cursor: not-allowed;
+      color: #e0e0e0;
+      border-color: #555;
+    }
+
+    #btn-optimisation:hover {
+      border-color: #adff2f;
+      color: #adff2f;
     }
 
     #btn-launch {
@@ -94,7 +98,7 @@
   <p class="subtitle">Lockheed · Airbus · Dassault · Rheinmetall · Saab</p>
 
   <div class="buttons" id="buttons">
-    <button id="btn-optimisation" disabled title="Coming soon">Optimisation</button>
+    <button id="btn-optimisation" onclick="optimise()">Optimisation</button>
     <button id="btn-launch" onclick="launch()">Lancer code</button>
   </div>
 
@@ -104,14 +108,14 @@
   </div>
 
   <script>
-    async function launch() {
+    async function _run(endpoint, loadingMsg) {
       document.getElementById("buttons").style.display = "none";
       document.getElementById("loader").style.display  = "flex";
+      document.getElementById("loader-msg").textContent = loadingMsg;
 
       try {
-        const res  = await fetch("/run-analysis", { method: "POST" });
+        const res  = await fetch(endpoint, { method: "POST" });
         const data = await res.json();
-
         if (data.ok) {
           window.location.href = "/dashboard";
         } else {
@@ -121,6 +125,9 @@
         document.getElementById("loader-msg").textContent = "Network error.";
       }
     }
+
+    function launch()   { _run("/run-analysis",     "Fetching data & running analysis…"); }
+    function optimise() { _run("/run-optimisation",  "Running Markowitz optimisation…");  }
   </script>
 
 </body>
