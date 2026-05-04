@@ -167,16 +167,40 @@ def build_ols(name_y: str, name_x: str,
     x_grid = np.linspace(df100[name_x].min(), df100[name_x].max(), 200)
     y_grid = alpha + beta * x_grid
 
+    r2      = model.rsquared
+    pval_a  = model.pvalues["const"]
+    pval_b  = model.pvalues[name_x]
+    tval_a  = model.tvalues["const"]
+    tval_b  = model.tvalues[name_x]
+
+    stats_text = (
+        f"<b>R² = {r2:.4f}</b><br>"
+        f"α = {alpha:.4f}  (t={tval_a:.2f}, p={pval_a:.4f})<br>"
+        f"β = {beta:.4f}  (t={tval_b:.2f}, p={pval_b:.4f})<br>"
+        f"N = {int(model.nobs)}"
+    )
+
     # Scatter + regression line
     fig1 = go.Figure(layout=LAYOUT)
     fig1.update_layout(
-        title       = f"OLS Price (base 100) : {name_y} vs {name_x}  (beta={beta:.2f})",
+        title       = f"OLS Price (base 100) : {name_y} vs {name_x}  —  R²={r2:.4f}  β={beta:.4f}",
         xaxis_title = name_x,
         yaxis_title = name_y,
     )
     fig1.add_scatter(x=df100[name_x], y=df100[name_y],
                      mode="markers", name="Data", marker=dict(size=3, opacity=0.5))
-    fig1.add_scatter(x=x_grid, y=y_grid, name=f"Regression (beta={beta:.2f})")
+    fig1.add_scatter(x=x_grid, y=y_grid, name=f"Regression (β={beta:.4f})")
+    fig1.add_annotation(
+        xref="paper", yref="paper", x=0.02, y=0.98,
+        xanchor="left", yanchor="top",
+        text=stats_text,
+        showarrow=False,
+        font=dict(size=12, color="white"),
+        bgcolor="rgba(0,0,0,0.5)",
+        bordercolor="rgba(255,255,255,0.3)",
+        borderwidth=1,
+        borderpad=6,
+    )
     _write(fig1, CHARTS_QUANTITATIVE / f"ols_price_{slug}.html")
 
     # Time-series estimated vs real
@@ -201,15 +225,39 @@ def build_ols(name_y: str, name_x: str,
     xr_grid = np.linspace(rets[name_x].min(), rets[name_x].max(), 200)
     yr_grid = alpha_r + beta_r * xr_grid
 
+    r2_r     = model_r.rsquared
+    pval_ar  = model_r.pvalues["const"]
+    pval_br  = model_r.pvalues[name_x]
+    tval_ar  = model_r.tvalues["const"]
+    tval_br  = model_r.tvalues[name_x]
+
+    stats_text_r = (
+        f"<b>R² = {r2_r:.4f}</b><br>"
+        f"α = {alpha_r:.4f}  (t={tval_ar:.2f}, p={pval_ar:.4f})<br>"
+        f"β = {beta_r:.4f}  (t={tval_br:.2f}, p={pval_br:.4f})<br>"
+        f"N = {int(model_r.nobs)}"
+    )
+
     fig3 = go.Figure(layout=LAYOUT)
     fig3.update_layout(
-        title       = f"OLS Returns (beta) : {name_y} vs {name_x}  (beta={beta_r:.2f})",
+        title       = f"OLS Returns (beta) : {name_y} vs {name_x}  —  R²={r2_r:.4f}  β={beta_r:.4f}",
         xaxis_title = f"Return {name_x}",
         yaxis_title = f"Return {name_y}",
     )
     fig3.add_scatter(x=rets[name_x], y=rets[name_y],
                      mode="markers", name="Data", marker=dict(size=3, opacity=0.5))
-    fig3.add_scatter(x=xr_grid, y=yr_grid, name=f"Regression (beta={beta_r:.2f})")
+    fig3.add_scatter(x=xr_grid, y=yr_grid, name=f"Regression (β={beta_r:.4f})")
+    fig3.add_annotation(
+        xref="paper", yref="paper", x=0.02, y=0.98,
+        xanchor="left", yanchor="top",
+        text=stats_text_r,
+        showarrow=False,
+        font=dict(size=12, color="white"),
+        bgcolor="rgba(0,0,0,0.5)",
+        bordercolor="rgba(255,255,255,0.3)",
+        borderwidth=1,
+        borderpad=6,
+    )
     _write(fig3, CHARTS_QUANTITATIVE / f"ols_returns_{slug}.html")
 
     # Cumulative returns
