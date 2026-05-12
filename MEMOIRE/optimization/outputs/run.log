@@ -1,0 +1,543 @@
+2026-05-12 14:35:51 │ INFO     │ Demarrage du pipeline d'optimisation de portefeuille
+2026-05-12 14:35:51 │ INFO     │ Outputs -> C:\Eliott\154-capital\MEMOIRE\optimization\outputs
+2026-05-12 14:35:51 │ INFO     │ Telechargement des prix depuis 2000-01-01 ...
+2026-05-12 14:35:52 │ SUCCESS  │ 6826 jours charges  |  2000-01-03 → 2026-05-12  |  5 actifs
+2026-05-12 14:35:52 │ INFO     │ 
+───────────────────────────────────────────────────────
+  PIPELINE AVANCE : XGBoost + Custom Max Diversification
+───────────────────────────────────────────────────────
+2026-05-12 14:35:52 │ INFO     │ Etape 1/3 — XGBoost ranking ...
+2026-05-12 14:35:52 │ INFO     │ Fenetre entrainement : 2012-09-12 → 2026-05-12  (14 ans)
+2026-05-12 14:35:52 │ DEBUG    │   Airbus                      XGB R²(OOS)=   n/a  OLS R²=0.0408 [✓ sig]  Pred=+46.94%/an
+2026-05-12 14:35:52 │ DEBUG    │   Dassault Aviation           XGB R²(OOS)=   n/a  OLS R²=0.0145 [✓ sig]  Pred=+44.02%/an
+2026-05-12 14:35:52 │ DEBUG    │   Lockheed Martin             XGB R²(OOS)=   n/a  OLS R²=0.0546 [✓ sig]  Pred=+14.63%/an
+2026-05-12 14:35:53 │ DEBUG    │   Rheinmetall                 XGB R²(OOS)=   n/a  OLS R²=0.0802 [✓ sig]  Pred=+105.95%/an
+2026-05-12 14:35:53 │ DEBUG    │   Saab                        XGB R²(OOS)=   n/a  OLS R²=0.0603 [✓ sig]  Pred=-57.35%/an
+2026-05-12 14:35:53 │ SUCCESS  │ XGBoost ranking termine — 5 actifs traites
+2026-05-12 14:35:53 │ INFO     │   Classement XGBoost :
+2026-05-12 14:35:53 │ INFO     │   #    Actif                        Pred/an   mu_norm
+2026-05-12 14:35:53 │ INFO     │   ────────────────────────────────────────────────────
+2026-05-12 14:35:53 │ INFO     │   1.0  Rheinmetall                ▲ +105.95%    1.0000
+2026-05-12 14:35:53 │ INFO     │   2.0  Airbus                     ▲ +46.94%    0.6748
+2026-05-12 14:35:53 │ INFO     │   3.0  Dassault Aviation          ▲ +44.02%    0.6587
+2026-05-12 14:35:53 │ INFO     │   4.0  Lockheed Martin            ▲ +14.63%    0.4967
+2026-05-12 14:35:53 │ INFO     │   5.0  Saab                       ▼ -57.35%    0.1000
+2026-05-12 14:35:53 │ INFO     │   Diagnostics ML :
+2026-05-12 14:35:53 │ INFO     │   Actif                      N_train   XGB R²   OLS R²   F-pval  Pred/an
+2026-05-12 14:35:53 │ INFO     │   ────────────────────────────────────────────────────────────────────────
+2026-05-12 14:35:53 │ INFO     │   Airbus                        3508       n/a   0.0408   0.0000✓  +46.94%
+2026-05-12 14:35:53 │ INFO     │   Dassault Aviation             3508       n/a   0.0145   0.0000✓  +44.02%
+2026-05-12 14:35:53 │ INFO     │   Lockheed Martin               3508       n/a   0.0546   0.0000✓  +14.63%
+2026-05-12 14:35:53 │ INFO     │   Rheinmetall                   3508       n/a   0.0802   0.0000✓  +105.95%
+2026-05-12 14:35:53 │ INFO     │   Saab                          3508       n/a   0.0603   0.0000✓  -57.35%
+2026-05-12 14:35:53 │ INFO     │ Etape 2/3 — Custom Max Diversification ...
+2026-05-12 14:35:53 │ INFO     │   Optimisation  Max Div (standard) ...
+2026-05-12 14:35:53 │ INFO     │   Optimisation  Max Div (mu-tilted) ...
+2026-05-12 14:35:53 │ INFO     │   Optimisation  Full (DR_mu + alpha) ...
+2026-05-12 14:35:53 │ DEBUG    │ Calcul frontiere de Pareto ...
+2026-05-12 14:35:53 │ DEBUG    │ lambda* = 0.76  (Sharpe predit max = 2.834)
+2026-05-12 14:35:53 │ INFO     │   Optimisation  Max Alpha (XGBoost) ...
+2026-05-12 14:35:53 │ SUCCESS  │ Optimisation terminee
+2026-05-12 14:35:53 │ INFO     │   Strategie                         ret/an  pred/an     vol   sharpe       DR    DR_mu  lambda*
+2026-05-12 14:35:53 │ INFO     │   ─────────────────────────────────────────────────────────────────────────────────────
+2026-05-12 14:35:53 │ INFO     │   Max Div (standard)               +17.22%  +25.52%  18.69%    0.814   1.5875   0.9053    —  
+2026-05-12 14:35:53 │ INFO     │   Max Div (mu-tilted)              +19.38%  +62.43%  22.50%    0.773   1.4288   1.1333    —  
+2026-05-12 14:35:53 │ INFO     │   Full (DR_mu + alpha)             +22.41%  +87.49%  30.17%    0.676   1.1875   1.0800  0.76
+2026-05-12 14:35:53 │ INFO     │   Max Alpha (XGBoost)              +25.37%  +105.58%  37.38%    0.625   1.0022   1.0005    —  
+2026-05-12 14:35:53 │ INFO     │ Etape 3/3 — Generation des graphiques ...
+2026-05-12 14:35:54 │ DEBUG    │ Graphique enregistre : xgb_ranking.png
+2026-05-12 14:35:55 │ DEBUG    │ Graphique enregistre : xgb_diagnostics.png
+2026-05-12 14:35:55 │ DEBUG    │ Graphique enregistre : advanced_weights.png
+2026-05-12 14:35:56 │ DEBUG    │ Graphique enregistre : pareto_frontier.png
+2026-05-12 14:35:57 │ DEBUG    │ Graphique enregistre : advanced_cumulative.png
+2026-05-12 14:35:57 │ DEBUG    │ Graphique enregistre : advanced_metrics.png
+2026-05-12 14:35:57 │ INFO     │ Metriques avancees :
+2026-05-12 14:35:57 │ INFO     │   Strategy                         Annual Return      Annual Vol          Sharpe         Sortino    Max Drawdown          Calmar
+2026-05-12 14:35:57 │ INFO     │   ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+2026-05-12 14:35:57 │ INFO     │   Equal Weight                            18.41%          20.75%           0.791           0.780         -55.17%           0.334
+2026-05-12 14:35:57 │ INFO     │   Max Div (standard)                      17.22%          18.69%           0.814           0.799         -51.38%           0.335
+2026-05-12 14:35:57 │ INFO     │   Max Div (mu-tilted)                     19.38%          22.50%           0.773           0.769         -56.27%           0.344
+2026-05-12 14:35:57 │ INFO     │   Full (DR_mu + alpha)                    22.41%          30.17%           0.676           0.696         -68.56%           0.327
+2026-05-12 14:35:57 │ INFO     │   Max Alpha (XGBoost)                     25.37%          37.38%           0.625           0.660         -76.42%           0.332
+2026-05-12 14:35:57 │ SUCCESS  │ Pipeline avance termine
+2026-05-12 14:35:57 │ SUCCESS  │ Pipeline termine — tous les outputs dans C:\Eliott\154-capital\MEMOIRE\optimization\outputs
+2026-05-12 14:44:51 │ INFO     │ Lecture de l'univers : univers.xlsx
+2026-05-12 14:44:52 │ WARNING  │ Actifs exclus (>20% NaN) : ['ADYEN.AS', 'ALC.SW', 'ANSS', 'DHER.DE', 'PDD']
+2026-05-12 14:44:52 │ SUCCESS  │ 2919 jours  |  2015-01-02 → 2026-03-31  |  76 actifs
+2026-05-12 14:44:52 │ INFO     │ Actifs charges : ['0700.HK', 'AAPL', 'ABBV', 'AIR.PA', 'ALV.DE', 'AMZN', 'ASML.AS', 'AXP', 'AZN', 'BABA', 'BAS.DE', 'BLK', 'BNP.PA', 'BRK-B', 'C', 'CAP.PA', 'DBK.DE', 'DHR', 'DIS', 'EDEN.PA', 'FAST', 'GOOGL', 'GS', 'HD', 'HDFCBANK.NS', 'HSBC', 'HUBS', 'ICICIBANK.NS', 'IEX', 'INFY.NS', 'INGA.AS', 'JD', 'JNJ', 'JPM', 'KER.PA', 'KNEBV.HE', 'KO', 'LULU', 'MC.PA', 'MCD', 'META', 'MRK', 'MS', 'MSFT', 'NESN.SW', 'NKE', 'NOVN.SW', 'NVDA', 'NVS', 'ODFL', 'OR.PA', 'PAYC', 'PEP', 'PFE', 'PG', 'RELIANCE.NS', 'RMS.PA', 'RNO.PA', 'ROG.SW', 'ROK', 'SAN.PA', 'SAP.DE', 'SBUX', 'SIE.DE', 'SU.PA', 'TCS.NS', 'TMO', 'TSM', 'TT', 'TTE.PA', 'UMI.BR', 'UNH', 'V', 'WAT', 'WLN.PA', 'ZAL.DE']
+2026-05-12 14:45:10 │ INFO     │ Demarrage du pipeline d'optimisation de portefeuille
+2026-05-12 14:45:10 │ INFO     │ Outputs -> C:\Eliott\154-capital\MEMOIRE\optimization\outputs
+2026-05-12 14:45:10 │ INFO     │ Lecture de l'univers : univers.xlsx
+2026-05-12 14:45:11 │ WARNING  │ Actifs exclus (>20% NaN) : ['ADYEN.AS', 'ALC.SW', 'ANSS', 'DHER.DE', 'PDD']
+2026-05-12 14:45:11 │ SUCCESS  │ 2919 jours  |  2015-01-02 → 2026-03-31  |  76 actifs
+2026-05-12 14:45:11 │ INFO     │ Actifs charges : ['0700.HK', 'AAPL', 'ABBV', 'AIR.PA', 'ALV.DE', 'AMZN', 'ASML.AS', 'AXP', 'AZN', 'BABA', 'BAS.DE', 'BLK', 'BNP.PA', 'BRK-B', 'C', 'CAP.PA', 'DBK.DE', 'DHR', 'DIS', 'EDEN.PA', 'FAST', 'GOOGL', 'GS', 'HD', 'HDFCBANK.NS', 'HSBC', 'HUBS', 'ICICIBANK.NS', 'IEX', 'INFY.NS', 'INGA.AS', 'JD', 'JNJ', 'JPM', 'KER.PA', 'KNEBV.HE', 'KO', 'LULU', 'MC.PA', 'MCD', 'META', 'MRK', 'MS', 'MSFT', 'NESN.SW', 'NKE', 'NOVN.SW', 'NVDA', 'NVS', 'ODFL', 'OR.PA', 'PAYC', 'PEP', 'PFE', 'PG', 'RELIANCE.NS', 'RMS.PA', 'RNO.PA', 'ROG.SW', 'ROK', 'SAN.PA', 'SAP.DE', 'SBUX', 'SIE.DE', 'SU.PA', 'TCS.NS', 'TMO', 'TSM', 'TT', 'TTE.PA', 'UMI.BR', 'UNH', 'V', 'WAT', 'WLN.PA', 'ZAL.DE']
+2026-05-12 14:45:11 │ INFO     │ 
+───────────────────────────────────────────────────────
+  PIPELINE AVANCE : XGBoost + Custom Max Diversification
+───────────────────────────────────────────────────────
+2026-05-12 14:45:11 │ INFO     │ Etape 1/3 — XGBoost ranking  (8 ans de train) ...
+2026-05-12 14:45:11 │ INFO     │ Fenetre entrainement : 2018-06-26 → 2026-03-31  (8 ans)
+2026-05-12 14:45:11 │ DEBUG    │   0700.HK                     XGB R²(OOS)=   n/a  OLS R²=0.0760 [✓ sig]  Pred=-56.41%/an
+2026-05-12 14:45:12 │ DEBUG    │   AAPL                        XGB R²(OOS)=   n/a  OLS R²=0.1178 [✓ sig]  Pred=+44.29%/an
+2026-05-12 14:45:12 │ DEBUG    │   ABBV                        XGB R²(OOS)=   n/a  OLS R²=0.0787 [✓ sig]  Pred=+26.89%/an
+2026-05-12 14:45:12 │ DEBUG    │   AIR.PA                      XGB R²(OOS)=   n/a  OLS R²=0.0661 [✓ sig]  Pred=-37.77%/an
+2026-05-12 14:45:12 │ DEBUG    │   ALV.DE                      XGB R²(OOS)=   n/a  OLS R²=0.0975 [✓ sig]  Pred=+24.15%/an
+2026-05-12 14:45:12 │ DEBUG    │   AMZN                        XGB R²(OOS)=   n/a  OLS R²=0.0416 [✓ sig]  Pred=+43.66%/an
+2026-05-12 14:45:12 │ DEBUG    │   ASML.AS                     XGB R²(OOS)=   n/a  OLS R²=0.0858 [✓ sig]  Pred=+83.31%/an
+2026-05-12 14:45:13 │ DEBUG    │   AXP                         XGB R²(OOS)=   n/a  OLS R²=0.0555 [✓ sig]  Pred=+133.32%/an
+2026-05-12 14:45:13 │ DEBUG    │   AZN                         XGB R²(OOS)=   n/a  OLS R²=0.1788 [✓ sig]  Pred=-41.01%/an
+2026-05-12 14:45:13 │ DEBUG    │   BABA                        XGB R²(OOS)=   n/a  OLS R²=0.0725 [✓ sig]  Pred=-23.60%/an
+2026-05-12 14:45:13 │ DEBUG    │   BAS.DE                      XGB R²(OOS)=   n/a  OLS R²=0.0935 [✓ sig]  Pred=-35.72%/an
+2026-05-12 14:45:13 │ DEBUG    │   BLK                         XGB R²(OOS)=   n/a  OLS R²=0.1212 [✓ sig]  Pred=+57.90%/an
+2026-05-12 14:45:13 │ DEBUG    │   BNP.PA                      XGB R²(OOS)=   n/a  OLS R²=0.0878 [✓ sig]  Pred=+70.99%/an
+2026-05-12 14:45:13 │ DEBUG    │   BRK-B                       XGB R²(OOS)=   n/a  OLS R²=0.1269 [✓ sig]  Pred=+58.44%/an
+2026-05-12 14:45:14 │ DEBUG    │   C                           XGB R²(OOS)=   n/a  OLS R²=0.0618 [✓ sig]  Pred=+7.08%/an
+2026-05-12 14:45:14 │ DEBUG    │   CAP.PA                      XGB R²(OOS)=   n/a  OLS R²=0.1221 [✓ sig]  Pred=+80.53%/an
+2026-05-12 14:45:14 │ DEBUG    │   DBK.DE                      XGB R²(OOS)=   n/a  OLS R²=0.1293 [✓ sig]  Pred=+130.64%/an
+2026-05-12 14:45:14 │ DEBUG    │   DHR                         XGB R²(OOS)=   n/a  OLS R²=0.0829 [✓ sig]  Pred=+69.70%/an
+2026-05-12 14:45:14 │ DEBUG    │   DIS                         XGB R²(OOS)=   n/a  OLS R²=0.0565 [✓ sig]  Pred=+17.31%/an
+2026-05-12 14:45:14 │ DEBUG    │   EDEN.PA                     XGB R²(OOS)=   n/a  OLS R²=0.1468 [✓ sig]  Pred=-17.64%/an
+2026-05-12 14:45:15 │ DEBUG    │   FAST                        XGB R²(OOS)=   n/a  OLS R²=0.1708 [✓ sig]  Pred=-7.61%/an
+2026-05-12 14:45:15 │ DEBUG    │   GOOGL                       XGB R²(OOS)=   n/a  OLS R²=0.0421 [✓ sig]  Pred=+4.38%/an
+2026-05-12 14:45:15 │ DEBUG    │   GS                          XGB R²(OOS)=   n/a  OLS R²=0.0975 [✓ sig]  Pred=+55.64%/an
+2026-05-12 14:45:15 │ DEBUG    │   HD                          XGB R²(OOS)=   n/a  OLS R²=0.1262 [✓ sig]  Pred=+16.85%/an
+2026-05-12 14:45:15 │ DEBUG    │   HDFCBANK.NS                 XGB R²(OOS)=   n/a  OLS R²=0.1090 [✓ sig]  Pred=+117.94%/an
+2026-05-12 14:45:15 │ DEBUG    │   HSBC                        XGB R²(OOS)=   n/a  OLS R²=0.1091 [✓ sig]  Pred=+42.97%/an
+2026-05-12 14:45:16 │ DEBUG    │   HUBS                        XGB R²(OOS)=   n/a  OLS R²=0.0959 [✓ sig]  Pred=+60.77%/an
+2026-05-12 14:45:16 │ DEBUG    │   ICICIBANK.NS                XGB R²(OOS)=   n/a  OLS R²=0.1093 [✓ sig]  Pred=+218.32%/an
+2026-05-12 14:45:16 │ DEBUG    │   IEX                         XGB R²(OOS)=   n/a  OLS R²=0.1653 [✓ sig]  Pred=-22.93%/an
+2026-05-12 14:45:16 │ DEBUG    │   INFY.NS                     XGB R²(OOS)=   n/a  OLS R²=0.0861 [✓ sig]  Pred=-56.52%/an
+2026-05-12 14:45:16 │ DEBUG    │   INGA.AS                     XGB R²(OOS)=   n/a  OLS R²=0.0938 [✓ sig]  Pred=+44.82%/an
+2026-05-12 14:45:16 │ DEBUG    │   JD                          XGB R²(OOS)=   n/a  OLS R²=0.0677 [✓ sig]  Pred=-141.95%/an
+2026-05-12 14:45:16 │ DEBUG    │   JNJ                         XGB R²(OOS)=   n/a  OLS R²=0.1033 [✓ sig]  Pred=+48.07%/an
+2026-05-12 14:45:17 │ DEBUG    │   JPM                         XGB R²(OOS)=   n/a  OLS R²=0.0910 [✓ sig]  Pred=+28.24%/an
+2026-05-12 14:45:17 │ DEBUG    │   KER.PA                      XGB R²(OOS)=   n/a  OLS R²=0.1508 [✓ sig]  Pred=+56.07%/an
+2026-05-12 14:45:17 │ DEBUG    │   KNEBV.HE                    XGB R²(OOS)=   n/a  OLS R²=0.0532 [✓ sig]  Pred=-15.27%/an
+2026-05-12 14:45:17 │ DEBUG    │   KO                          XGB R²(OOS)=   n/a  OLS R²=0.1351 [✓ sig]  Pred=-47.91%/an
+2026-05-12 14:45:17 │ DEBUG    │   LULU                        XGB R²(OOS)=   n/a  OLS R²=0.0558 [✓ sig]  Pred=+123.07%/an
+2026-05-12 14:45:17 │ DEBUG    │   MC.PA                       XGB R²(OOS)=   n/a  OLS R²=0.0922 [✓ sig]  Pred=+61.90%/an
+2026-05-12 14:45:18 │ DEBUG    │   MCD                         XGB R²(OOS)=   n/a  OLS R²=0.1777 [✓ sig]  Pred=+32.52%/an
+2026-05-12 14:45:18 │ DEBUG    │   META                        XGB R²(OOS)=   n/a  OLS R²=0.1092 [✓ sig]  Pred=+47.23%/an
+2026-05-12 14:45:18 │ DEBUG    │   MRK                         XGB R²(OOS)=   n/a  OLS R²=0.1078 [✓ sig]  Pred=+12.12%/an
+2026-05-12 14:45:18 │ DEBUG    │   MS                          XGB R²(OOS)=   n/a  OLS R²=0.1485 [✓ sig]  Pred=+2.75%/an
+2026-05-12 14:45:18 │ DEBUG    │   MSFT                        XGB R²(OOS)=   n/a  OLS R²=0.0822 [✓ sig]  Pred=-31.24%/an
+2026-05-12 14:45:18 │ DEBUG    │   NESN.SW                     XGB R²(OOS)=   n/a  OLS R²=0.0710 [✓ sig]  Pred=+43.45%/an
+2026-05-12 14:45:19 │ DEBUG    │   NKE                         XGB R²(OOS)=   n/a  OLS R²=0.1442 [✓ sig]  Pred=-21.55%/an
+2026-05-12 14:45:19 │ DEBUG    │   NOVN.SW                     XGB R²(OOS)=   n/a  OLS R²=0.1067 [✓ sig]  Pred=-11.83%/an
+2026-05-12 14:45:19 │ DEBUG    │   NVDA                        XGB R²(OOS)=   n/a  OLS R²=0.0433 [✓ sig]  Pred=+35.71%/an
+2026-05-12 14:45:19 │ DEBUG    │   NVS                         XGB R²(OOS)=   n/a  OLS R²=0.1138 [✓ sig]  Pred=+111.65%/an
+2026-05-12 14:45:19 │ DEBUG    │   ODFL                        XGB R²(OOS)=   n/a  OLS R²=0.0598 [✓ sig]  Pred=+60.37%/an
+2026-05-12 14:45:19 │ DEBUG    │   OR.PA                       XGB R²(OOS)=   n/a  OLS R²=0.0523 [✓ sig]  Pred=+4.76%/an
+2026-05-12 14:45:20 │ DEBUG    │   PAYC                        XGB R²(OOS)=   n/a  OLS R²=0.1276 [✓ sig]  Pred=+16.51%/an
+2026-05-12 14:45:20 │ DEBUG    │   PEP                         XGB R²(OOS)=   n/a  OLS R²=0.1407 [✓ sig]  Pred=-1.54%/an
+2026-05-12 14:45:20 │ DEBUG    │   PFE                         XGB R²(OOS)=   n/a  OLS R²=0.1259 [✓ sig]  Pred=-31.81%/an
+2026-05-12 14:45:20 │ DEBUG    │   PG                          XGB R²(OOS)=   n/a  OLS R²=0.1055 [✓ sig]  Pred=-2.47%/an
+2026-05-12 14:45:20 │ DEBUG    │   RELIANCE.NS                 XGB R²(OOS)=   n/a  OLS R²=0.2922 [✓ sig]  Pred=+41.88%/an
+2026-05-12 14:45:20 │ DEBUG    │   RMS.PA                      XGB R²(OOS)=   n/a  OLS R²=0.0282 [✓ sig]  Pred=+53.63%/an
+2026-05-12 14:45:20 │ DEBUG    │   RNO.PA                      XGB R²(OOS)=   n/a  OLS R²=0.1090 [✓ sig]  Pred=+22.96%/an
+2026-05-12 14:45:21 │ DEBUG    │   ROG.SW                      XGB R²(OOS)=   n/a  OLS R²=0.0510 [✓ sig]  Pred=-77.96%/an
+2026-05-12 14:45:21 │ DEBUG    │   ROK                         XGB R²(OOS)=   n/a  OLS R²=0.1620 [✓ sig]  Pred=+102.60%/an
+2026-05-12 14:45:21 │ DEBUG    │   SAN.PA                      XGB R²(OOS)=   n/a  OLS R²=0.1081 [✓ sig]  Pred=+47.98%/an
+2026-05-12 14:45:21 │ DEBUG    │   SAP.DE                      XGB R²(OOS)=   n/a  OLS R²=0.0220 [✓ sig]  Pred=-39.41%/an
+2026-05-12 14:45:21 │ DEBUG    │   SBUX                        XGB R²(OOS)=   n/a  OLS R²=0.1008 [✓ sig]  Pred=-6.84%/an
+2026-05-12 14:45:21 │ DEBUG    │   SIE.DE                      XGB R²(OOS)=   n/a  OLS R²=0.0933 [✓ sig]  Pred=+154.32%/an
+2026-05-12 14:45:22 │ DEBUG    │   SU.PA                       XGB R²(OOS)=   n/a  OLS R²=0.0760 [✓ sig]  Pred=+29.02%/an
+2026-05-12 14:45:22 │ DEBUG    │   TCS.NS                      XGB R²(OOS)=   n/a  OLS R²=0.1230 [✓ sig]  Pred=-18.78%/an
+2026-05-12 14:45:22 │ DEBUG    │   TMO                         XGB R²(OOS)=   n/a  OLS R²=0.0955 [✓ sig]  Pred=+101.44%/an
+2026-05-12 14:45:22 │ DEBUG    │   TSM                         XGB R²(OOS)=   n/a  OLS R²=0.0690 [✓ sig]  Pred=+4.05%/an
+2026-05-12 14:45:22 │ DEBUG    │   TT                          XGB R²(OOS)=   n/a  OLS R²=0.1066 [✓ sig]  Pred=+65.02%/an
+2026-05-12 14:45:22 │ DEBUG    │   TTE.PA                      XGB R²(OOS)=   n/a  OLS R²=0.0844 [✓ sig]  Pred=-86.25%/an
+2026-05-12 14:45:23 │ DEBUG    │   UMI.BR                      XGB R²(OOS)=   n/a  OLS R²=0.1059 [✓ sig]  Pred=-13.26%/an
+2026-05-12 14:45:23 │ DEBUG    │   UNH                         XGB R²(OOS)=   n/a  OLS R²=0.1554 [✓ sig]  Pred=-107.20%/an
+2026-05-12 14:45:23 │ DEBUG    │   V                           XGB R²(OOS)=   n/a  OLS R²=0.0891 [✓ sig]  Pred=+87.47%/an
+2026-05-12 14:45:23 │ DEBUG    │   WAT                         XGB R²(OOS)=   n/a  OLS R²=0.0376 [✓ sig]  Pred=+53.97%/an
+2026-05-12 14:45:23 │ DEBUG    │   WLN.PA                      XGB R²(OOS)=   n/a  OLS R²=0.0851 [✓ sig]  Pred=+257.96%/an
+2026-05-12 14:45:23 │ DEBUG    │   ZAL.DE                      XGB R²(OOS)=   n/a  OLS R²=0.0534 [✓ sig]  Pred=-2.44%/an
+2026-05-12 14:45:23 │ SUCCESS  │ XGBoost ranking termine — 76 actifs traites
+2026-05-12 14:45:23 │ INFO     │   Classement XGBoost :
+2026-05-12 14:45:23 │ INFO     │   #    Actif                        Pred/an   mu_norm
+2026-05-12 14:45:23 │ INFO     │   ────────────────────────────────────────────────────
+2026-05-12 14:45:23 │ INFO     │   2.0  AXP                        ▲ +133.32%    1.0000
+2026-05-12 14:45:23 │ INFO     │   2.0  ICICIBANK.NS               ▲ +218.32%    1.0000
+2026-05-12 14:45:23 │ INFO     │   2.0  SIE.DE                     ▲ +154.32%    1.0000
+2026-05-12 14:45:23 │ INFO     │   2.0  WLN.PA                     ▲ +257.96%    1.0000
+2026-05-12 14:45:23 │ INFO     │   5.0  DBK.DE                     ▲ +130.64%    0.9886
+2026-05-12 14:45:23 │ INFO     │   6.0  LULU                       ▲ +123.07%    0.9563
+2026-05-12 14:45:23 │ INFO     │   7.0  HDFCBANK.NS                ▲ +117.94%    0.9345
+2026-05-12 14:45:23 │ INFO     │   8.0  NVS                        ▲ +111.65%    0.9077
+2026-05-12 14:45:23 │ INFO     │   9.0  ROK                        ▲ +102.60%    0.8691
+2026-05-12 14:45:23 │ INFO     │   10.0 TMO                        ▲ +101.44%    0.8642
+2026-05-12 14:45:23 │ INFO     │   11.0 V                          ▲ +87.47%    0.8047
+2026-05-12 14:45:23 │ INFO     │   12.0 ASML.AS                    ▲ +83.31%    0.7870
+2026-05-12 14:45:23 │ INFO     │   13.0 CAP.PA                     ▲ +80.53%    0.7751
+2026-05-12 14:45:23 │ INFO     │   14.0 BNP.PA                     ▲ +70.99%    0.7345
+2026-05-12 14:45:23 │ INFO     │   15.0 DHR                        ▲ +69.70%    0.7290
+2026-05-12 14:45:23 │ INFO     │   16.0 TT                         ▲ +65.02%    0.7091
+2026-05-12 14:45:23 │ INFO     │   17.0 MC.PA                      ▲ +61.90%    0.6958
+2026-05-12 14:45:23 │ INFO     │   18.0 HUBS                       ▲ +60.77%    0.6909
+2026-05-12 14:45:23 │ INFO     │   19.0 ODFL                       ▲ +60.37%    0.6893
+2026-05-12 14:45:23 │ INFO     │   20.0 BRK-B                      ▲ +58.44%    0.6810
+2026-05-12 14:45:23 │ INFO     │   21.0 BLK                        ▲ +57.90%    0.6787
+2026-05-12 14:45:23 │ INFO     │   22.0 KER.PA                     ▲ +56.07%    0.6709
+2026-05-12 14:45:23 │ INFO     │   23.0 GS                         ▲ +55.64%    0.6691
+2026-05-12 14:45:23 │ INFO     │   24.0 WAT                        ▲ +53.97%    0.6620
+2026-05-12 14:45:23 │ INFO     │   25.0 RMS.PA                     ▲ +53.63%    0.6606
+2026-05-12 14:45:23 │ INFO     │   26.0 JNJ                        ▲ +48.07%    0.6368
+2026-05-12 14:45:23 │ INFO     │   27.0 SAN.PA                     ▲ +47.98%    0.6365
+2026-05-12 14:45:23 │ INFO     │   28.0 META                       ▲ +47.23%    0.6333
+2026-05-12 14:45:23 │ INFO     │   29.0 INGA.AS                    ▲ +44.82%    0.6230
+2026-05-12 14:45:23 │ INFO     │   30.0 AAPL                       ▲ +44.29%    0.6207
+2026-05-12 14:45:23 │ INFO     │   31.0 AMZN                       ▲ +43.66%    0.6181
+2026-05-12 14:45:23 │ INFO     │   32.0 NESN.SW                    ▲ +43.45%    0.6172
+2026-05-12 14:45:23 │ INFO     │   33.0 HSBC                       ▲ +42.97%    0.6151
+2026-05-12 14:45:23 │ INFO     │   34.0 RELIANCE.NS                ▲ +41.88%    0.6105
+2026-05-12 14:45:23 │ INFO     │   35.0 NVDA                       ▲ +35.71%    0.5842
+2026-05-12 14:45:23 │ INFO     │   36.0 MCD                        ▲ +32.52%    0.5706
+2026-05-12 14:45:23 │ INFO     │   37.0 SU.PA                      ▲ +29.02%    0.5557
+2026-05-12 14:45:23 │ INFO     │   38.0 JPM                        ▲ +28.24%    0.5524
+2026-05-12 14:45:23 │ INFO     │   39.0 ABBV                       ▲ +26.89%    0.5466
+2026-05-12 14:45:23 │ INFO     │   40.0 ALV.DE                     ▲ +24.15%    0.5350
+2026-05-12 14:45:23 │ INFO     │   41.0 RNO.PA                     ▲ +22.96%    0.5299
+2026-05-12 14:45:23 │ INFO     │   42.0 DIS                        ▲ +17.31%    0.5058
+2026-05-12 14:45:23 │ INFO     │   43.0 HD                         ▲ +16.85%    0.5039
+2026-05-12 14:45:23 │ INFO     │   44.0 PAYC                       ▲ +16.51%    0.5024
+2026-05-12 14:45:23 │ INFO     │   45.0 MRK                        ▲ +12.12%    0.4837
+2026-05-12 14:45:23 │ INFO     │   46.0 C                          ▲  +7.08%    0.4622
+2026-05-12 14:45:23 │ INFO     │   47.0 OR.PA                      ▲  +4.76%    0.4524
+2026-05-12 14:45:23 │ INFO     │   48.0 GOOGL                      ▲  +4.38%    0.4507
+2026-05-12 14:45:23 │ INFO     │   49.0 TSM                        ▲  +4.05%    0.4493
+2026-05-12 14:45:23 │ INFO     │   50.0 MS                         ▲  +2.75%    0.4438
+2026-05-12 14:45:23 │ INFO     │   51.0 PEP                        ▼  -1.54%    0.4255
+2026-05-12 14:45:23 │ INFO     │   52.0 ZAL.DE                     ▼  -2.44%    0.4217
+2026-05-12 14:45:23 │ INFO     │   53.0 PG                         ▼  -2.47%    0.4216
+2026-05-12 14:45:23 │ INFO     │   54.0 SBUX                       ▼  -6.84%    0.4029
+2026-05-12 14:45:23 │ INFO     │   55.0 FAST                       ▼  -7.61%    0.3997
+2026-05-12 14:45:23 │ INFO     │   56.0 NOVN.SW                    ▼ -11.83%    0.3817
+2026-05-12 14:45:23 │ INFO     │   57.0 UMI.BR                     ▼ -13.26%    0.3756
+2026-05-12 14:45:23 │ INFO     │   58.0 KNEBV.HE                   ▼ -15.27%    0.3670
+2026-05-12 14:45:23 │ INFO     │   59.0 EDEN.PA                    ▼ -17.64%    0.3569
+2026-05-12 14:45:23 │ INFO     │   60.0 TCS.NS                     ▼ -18.78%    0.3521
+2026-05-12 14:45:23 │ INFO     │   61.0 NKE                        ▼ -21.55%    0.3403
+2026-05-12 14:45:23 │ INFO     │   62.0 IEX                        ▼ -22.93%    0.3344
+2026-05-12 14:45:23 │ INFO     │   63.0 BABA                       ▼ -23.60%    0.3316
+2026-05-12 14:45:23 │ INFO     │   64.0 MSFT                       ▼ -31.24%    0.2990
+2026-05-12 14:45:23 │ INFO     │   65.0 PFE                        ▼ -31.81%    0.2966
+2026-05-12 14:45:23 │ INFO     │   66.0 BAS.DE                     ▼ -35.72%    0.2799
+2026-05-12 14:45:23 │ INFO     │   67.0 AIR.PA                     ▼ -37.77%    0.2712
+2026-05-12 14:45:23 │ INFO     │   68.0 SAP.DE                     ▼ -39.41%    0.2642
+2026-05-12 14:45:23 │ INFO     │   69.0 AZN                        ▼ -41.01%    0.2574
+2026-05-12 14:45:23 │ INFO     │   70.0 KO                         ▼ -47.91%    0.2280
+2026-05-12 14:45:23 │ INFO     │   71.0 0700.HK                    ▼ -56.41%    0.1918
+2026-05-12 14:45:23 │ INFO     │   72.0 INFY.NS                    ▼ -56.52%    0.1913
+2026-05-12 14:45:23 │ INFO     │   74.0 ROG.SW                     ▼ -77.96%    0.1000
+2026-05-12 14:45:23 │ INFO     │   74.0 JD                         ▼ -141.95%    0.1000
+2026-05-12 14:45:23 │ INFO     │   74.0 UNH                        ▼ -107.20%    0.1000
+2026-05-12 14:45:23 │ INFO     │   74.0 TTE.PA                     ▼ -86.25%    0.1000
+2026-05-12 14:45:23 │ INFO     │   Diagnostics ML :
+2026-05-12 14:45:23 │ INFO     │   Actif                      N_train   XGB R²   OLS R²   F-pval  Pred/an
+2026-05-12 14:45:23 │ INFO     │   ────────────────────────────────────────────────────────────────────────
+2026-05-12 14:45:23 │ INFO     │   0700.HK                       1996       n/a   0.0760   0.0000✓  -56.41%
+2026-05-12 14:45:23 │ INFO     │   AAPL                          1996       n/a   0.1178   0.0000✓  +44.29%
+2026-05-12 14:45:23 │ INFO     │   ABBV                          1996       n/a   0.0787   0.0000✓  +26.89%
+2026-05-12 14:45:23 │ INFO     │   AIR.PA                        1996       n/a   0.0661   0.0000✓  -37.77%
+2026-05-12 14:45:23 │ INFO     │   ALV.DE                        1996       n/a   0.0975   0.0000✓  +24.15%
+2026-05-12 14:45:23 │ INFO     │   AMZN                          1996       n/a   0.0416   0.0000✓  +43.66%
+2026-05-12 14:45:23 │ INFO     │   ASML.AS                       1996       n/a   0.0858   0.0000✓  +83.31%
+2026-05-12 14:45:23 │ INFO     │   AXP                           1996       n/a   0.0555   0.0000✓  +133.32%
+2026-05-12 14:45:23 │ INFO     │   AZN                           1996       n/a   0.1788   0.0000✓  -41.01%
+2026-05-12 14:45:23 │ INFO     │   BABA                          1996       n/a   0.0725   0.0000✓  -23.60%
+2026-05-12 14:45:23 │ INFO     │   BAS.DE                        1996       n/a   0.0935   0.0000✓  -35.72%
+2026-05-12 14:45:23 │ INFO     │   BLK                           1996       n/a   0.1212   0.0000✓  +57.90%
+2026-05-12 14:45:23 │ INFO     │   BNP.PA                        1996       n/a   0.0878   0.0000✓  +70.99%
+2026-05-12 14:45:23 │ INFO     │   BRK-B                         1996       n/a   0.1269   0.0000✓  +58.44%
+2026-05-12 14:45:23 │ INFO     │   C                             1996       n/a   0.0618   0.0000✓  +7.08%
+2026-05-12 14:45:23 │ INFO     │   CAP.PA                        1996       n/a   0.1221   0.0000✓  +80.53%
+2026-05-12 14:45:23 │ INFO     │   DBK.DE                        1996       n/a   0.1293   0.0000✓  +130.64%
+2026-05-12 14:45:23 │ INFO     │   DHR                           1996       n/a   0.0829   0.0000✓  +69.70%
+2026-05-12 14:45:23 │ INFO     │   DIS                           1996       n/a   0.0565   0.0000✓  +17.31%
+2026-05-12 14:45:23 │ INFO     │   EDEN.PA                       1996       n/a   0.1468   0.0000✓  -17.64%
+2026-05-12 14:45:23 │ INFO     │   FAST                          1996       n/a   0.1708   0.0000✓  -7.61%
+2026-05-12 14:45:23 │ INFO     │   GOOGL                         1996       n/a   0.0421   0.0000✓  +4.38%
+2026-05-12 14:45:23 │ INFO     │   GS                            1996       n/a   0.0975   0.0000✓  +55.64%
+2026-05-12 14:45:23 │ INFO     │   HD                            1996       n/a   0.1262   0.0000✓  +16.85%
+2026-05-12 14:45:23 │ INFO     │   HDFCBANK.NS                   1996       n/a   0.1090   0.0000✓  +117.94%
+2026-05-12 14:45:23 │ INFO     │   HSBC                          1996       n/a   0.1091   0.0000✓  +42.97%
+2026-05-12 14:45:23 │ INFO     │   HUBS                          1996       n/a   0.0959   0.0000✓  +60.77%
+2026-05-12 14:45:23 │ INFO     │   ICICIBANK.NS                  1996       n/a   0.1093   0.0000✓  +218.32%
+2026-05-12 14:45:23 │ INFO     │   IEX                           1996       n/a   0.1653   0.0000✓  -22.93%
+2026-05-12 14:45:23 │ INFO     │   INFY.NS                       1996       n/a   0.0861   0.0000✓  -56.52%
+2026-05-12 14:45:23 │ INFO     │   INGA.AS                       1996       n/a   0.0938   0.0000✓  +44.82%
+2026-05-12 14:45:23 │ INFO     │   JD                            1996       n/a   0.0677   0.0000✓  -141.95%
+2026-05-12 14:45:23 │ INFO     │   JNJ                           1996       n/a   0.1033   0.0000✓  +48.07%
+2026-05-12 14:45:23 │ INFO     │   JPM                           1996       n/a   0.0910   0.0000✓  +28.24%
+2026-05-12 14:45:23 │ INFO     │   KER.PA                        1996       n/a   0.1508   0.0000✓  +56.07%
+2026-05-12 14:45:23 │ INFO     │   KNEBV.HE                      1996       n/a   0.0532   0.0000✓  -15.27%
+2026-05-12 14:45:23 │ INFO     │   KO                            1996       n/a   0.1351   0.0000✓  -47.91%
+2026-05-12 14:45:23 │ INFO     │   LULU                          1996       n/a   0.0558   0.0000✓  +123.07%
+2026-05-12 14:45:23 │ INFO     │   MC.PA                         1996       n/a   0.0922   0.0000✓  +61.90%
+2026-05-12 14:45:23 │ INFO     │   MCD                           1996       n/a   0.1777   0.0000✓  +32.52%
+2026-05-12 14:45:23 │ INFO     │   META                          1996       n/a   0.1092   0.0000✓  +47.23%
+2026-05-12 14:45:23 │ INFO     │   MRK                           1996       n/a   0.1078   0.0000✓  +12.12%
+2026-05-12 14:45:23 │ INFO     │   MS                            1996       n/a   0.1485   0.0000✓  +2.75%
+2026-05-12 14:45:23 │ INFO     │   MSFT                          1996       n/a   0.0822   0.0000✓  -31.24%
+2026-05-12 14:45:23 │ INFO     │   NESN.SW                       1996       n/a   0.0710   0.0000✓  +43.45%
+2026-05-12 14:45:23 │ INFO     │   NKE                           1996       n/a   0.1442   0.0000✓  -21.55%
+2026-05-12 14:45:23 │ INFO     │   NOVN.SW                       1996       n/a   0.1067   0.0000✓  -11.83%
+2026-05-12 14:45:23 │ INFO     │   NVDA                          1996       n/a   0.0433   0.0000✓  +35.71%
+2026-05-12 14:45:23 │ INFO     │   NVS                           1996       n/a   0.1138   0.0000✓  +111.65%
+2026-05-12 14:45:23 │ INFO     │   ODFL                          1996       n/a   0.0598   0.0000✓  +60.37%
+2026-05-12 14:45:23 │ INFO     │   OR.PA                         1996       n/a   0.0523   0.0000✓  +4.76%
+2026-05-12 14:45:23 │ INFO     │   PAYC                          1996       n/a   0.1276   0.0000✓  +16.51%
+2026-05-12 14:45:23 │ INFO     │   PEP                           1996       n/a   0.1407   0.0000✓  -1.54%
+2026-05-12 14:45:23 │ INFO     │   PFE                           1996       n/a   0.1259   0.0000✓  -31.81%
+2026-05-12 14:45:23 │ INFO     │   PG                            1996       n/a   0.1055   0.0000✓  -2.47%
+2026-05-12 14:45:23 │ INFO     │   RELIANCE.NS                   1996       n/a   0.2922   0.0000✓  +41.88%
+2026-05-12 14:45:23 │ INFO     │   RMS.PA                        1996       n/a   0.0282   0.0000✓  +53.63%
+2026-05-12 14:45:23 │ INFO     │   RNO.PA                        1996       n/a   0.1090   0.0000✓  +22.96%
+2026-05-12 14:45:23 │ INFO     │   ROG.SW                        1996       n/a   0.0510   0.0000✓  -77.96%
+2026-05-12 14:45:23 │ INFO     │   ROK                           1996       n/a   0.1620   0.0000✓  +102.60%
+2026-05-12 14:45:23 │ INFO     │   SAN.PA                        1996       n/a   0.1081   0.0000✓  +47.98%
+2026-05-12 14:45:23 │ INFO     │   SAP.DE                        1996       n/a   0.0220   0.0000✓  -39.41%
+2026-05-12 14:45:23 │ INFO     │   SBUX                          1996       n/a   0.1008   0.0000✓  -6.84%
+2026-05-12 14:45:23 │ INFO     │   SIE.DE                        1996       n/a   0.0933   0.0000✓  +154.32%
+2026-05-12 14:45:23 │ INFO     │   SU.PA                         1996       n/a   0.0760   0.0000✓  +29.02%
+2026-05-12 14:45:23 │ INFO     │   TCS.NS                        1996       n/a   0.1230   0.0000✓  -18.78%
+2026-05-12 14:45:23 │ INFO     │   TMO                           1996       n/a   0.0955   0.0000✓  +101.44%
+2026-05-12 14:45:23 │ INFO     │   TSM                           1996       n/a   0.0690   0.0000✓  +4.05%
+2026-05-12 14:45:23 │ INFO     │   TT                            1996       n/a   0.1066   0.0000✓  +65.02%
+2026-05-12 14:45:23 │ INFO     │   TTE.PA                        1996       n/a   0.0844   0.0000✓  -86.25%
+2026-05-12 14:45:23 │ INFO     │   UMI.BR                        1996       n/a   0.1059   0.0000✓  -13.26%
+2026-05-12 14:45:23 │ INFO     │   UNH                           1996       n/a   0.1554   0.0000✓  -107.20%
+2026-05-12 14:45:23 │ INFO     │   V                             1996       n/a   0.0891   0.0000✓  +87.47%
+2026-05-12 14:45:23 │ INFO     │   WAT                           1996       n/a   0.0376   0.0000✓  +53.97%
+2026-05-12 14:45:23 │ INFO     │   WLN.PA                        1996       n/a   0.0851   0.0000✓  +257.96%
+2026-05-12 14:45:23 │ INFO     │   ZAL.DE                        1996       n/a   0.0534   0.0000✓  -2.44%
+2026-05-12 14:45:23 │ INFO     │ Etape 2/3 — Custom Max Diversification ...
+2026-05-12 14:45:23 │ INFO     │   Optimisation  Max Div (standard) ...
+2026-05-12 14:45:24 │ INFO     │   Optimisation  Max Div (mu-tilted) ...
+2026-05-12 14:45:24 │ INFO     │   Optimisation  Full (DR_mu + alpha) ...
+2026-05-12 14:45:24 │ DEBUG    │ Calcul frontiere de Pareto ...
+2026-05-12 14:45:33 │ DEBUG    │ lambda* = 0.73  (Sharpe predit max = 8.591)
+2026-05-12 14:45:33 │ INFO     │   Optimisation  Max Alpha (XGBoost) ...
+2026-05-12 14:45:33 │ SUCCESS  │ Optimisation terminee
+2026-05-12 14:45:33 │ INFO     │   Strategie                         ret/an  pred/an     vol   sharpe       DR    DR_mu  lambda*
+2026-05-12 14:45:33 │ INFO     │   ─────────────────────────────────────────────────────────────────────────────────────
+2026-05-12 14:45:33 │ INFO     │   Max Div (standard)               +12.61%  +24.05%  12.30%    0.863   2.2624   1.1884    —  
+2026-05-12 14:45:33 │ INFO     │   Max Div (mu-tilted)              +10.37%  +135.80%  16.08%    0.521   1.8974   1.7385    —  
+2026-05-12 14:45:33 │ INFO     │   Full (DR_mu + alpha)              +9.65%  +158.14%  18.17%    0.421   1.8053   1.7118  0.73
+2026-05-12 14:45:33 │ INFO     │   Max Alpha (XGBoost)              -15.23%  +240.51%  48.41%   -0.356   1.0359   1.0157    —  
+2026-05-12 14:45:33 │ INFO     │ Etape 3/3 — Generation des graphiques ...
+2026-05-12 14:45:34 │ DEBUG    │ Graphique enregistre : xgb_ranking.png
+2026-05-12 14:45:48 │ DEBUG    │ Graphique enregistre : xgb_diagnostics.png
+2026-05-12 14:45:48 │ DEBUG    │ Graphique enregistre : advanced_weights.png
+2026-05-12 14:45:59 │ DEBUG    │ Graphique enregistre : pareto_frontier.png
+2026-05-12 14:45:59 │ DEBUG    │ Graphique enregistre : advanced_cumulative.png
+2026-05-12 14:45:59 │ DEBUG    │ Graphique enregistre : advanced_metrics.png
+2026-05-12 14:45:59 │ INFO     │ Metriques avancees :
+2026-05-12 14:45:59 │ INFO     │   Strategy                         Annual Return      Annual Vol          Sharpe         Sortino    Max Drawdown          Calmar
+2026-05-12 14:45:59 │ INFO     │   ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+2026-05-12 14:45:59 │ INFO     │   Equal Weight                            15.15%          15.45%           0.851           0.794         -32.17%           0.471
+2026-05-12 14:45:59 │ INFO     │   Max Div (standard)                      12.61%          12.30%           0.863           0.801         -27.49%           0.459
+2026-05-12 14:45:59 │ INFO     │   Max Div (mu-tilted)                     10.37%          16.08%           0.521           0.484         -35.52%           0.292
+2026-05-12 14:45:59 │ INFO     │   Full (DR_mu + alpha)                     9.65%          18.17%           0.421           0.393         -38.05%           0.253
+2026-05-12 14:45:59 │ INFO     │   Max Alpha (XGBoost)                    -15.23%          48.41%          -0.356          -0.306         -99.42%          -0.153
+2026-05-12 14:45:59 │ INFO     │   SPY                                     13.02%          17.42%           0.633           0.613         -33.72%           0.386
+2026-05-12 14:45:59 │ SUCCESS  │ Pipeline avance termine
+2026-05-12 14:45:59 │ SUCCESS  │ Pipeline termine — tous les outputs dans C:\Eliott\154-capital\MEMOIRE\optimization\outputs
+2026-05-12 15:00:27 │ INFO     │ Pipeline d'optimisation de portefeuille
+2026-05-12 15:00:27 │ INFO     │ Outputs -> C:\Eliott\154-capital\MEMOIRE\optimization\outputs
+2026-05-12 15:00:27 │ INFO     │ Chargement univers : univers.xlsx
+2026-05-12 15:00:28 │ WARNING  │ Exclus (>20% NaN) : ['ADYEN.AS', 'ALC.SW', 'ANSS', 'DHER.DE', 'PDD']
+2026-05-12 15:00:28 │ SUCCESS  │ 76 actifs  |  2919 jours  |  2015-01-02 → 2026-03-31
+2026-05-12 15:00:28 │ INFO     │ 
+──────────────────────────────────────────────────────────
+  XGBOOST + MAX DIV ML
+──────────────────────────────────────────────────────────
+2026-05-12 15:00:28 │ INFO     │ Etape 1/3 — XGBoost ranking  (8 ans) ...
+2026-05-12 15:00:28 │ INFO     │   Fenetre : 2018-06-26 → 2026-03-31  (8 ans)
+2026-05-12 15:00:40 │ SUCCESS  │ XGBoost : 76 actifs traites
+2026-05-12 15:00:40 │ INFO     │   #     Actif                   Pred/an       mu
+2026-05-12 15:00:40 │ INFO     │   ─────────────────────────────────────────────
+2026-05-12 15:00:40 │ INFO     │   1.0   WLN.PA                ▲ +257.96%   1.0000
+2026-05-12 15:00:40 │ INFO     │   2.0   ICICIBANK.NS          ▲ +218.32%   1.0000
+2026-05-12 15:00:40 │ INFO     │   3.0   SIE.DE                ▲ +154.32%   1.0000
+2026-05-12 15:00:40 │ INFO     │   4.0   AXP                   ▲ +133.32%   1.0000
+2026-05-12 15:00:40 │ INFO     │   5.0   DBK.DE                ▲ +130.64%   0.9886
+2026-05-12 15:00:40 │ INFO     │   6.0   LULU                  ▲ +123.07%   0.9563
+2026-05-12 15:00:40 │ INFO     │   7.0   HDFCBANK.NS           ▲ +117.94%   0.9345
+2026-05-12 15:00:40 │ INFO     │   8.0   NVS                   ▲ +111.65%   0.9077
+2026-05-12 15:00:40 │ INFO     │   9.0   ROK                   ▲ +102.60%   0.8691
+2026-05-12 15:00:40 │ INFO     │   10.0  TMO                   ▲ +101.44%   0.8642
+2026-05-12 15:00:40 │ INFO     │   11.0  V                     ▲ +87.47%   0.8047
+2026-05-12 15:00:40 │ INFO     │   12.0  ASML.AS               ▲ +83.31%   0.7870
+2026-05-12 15:00:40 │ INFO     │   13.0  CAP.PA                ▲ +80.53%   0.7751
+2026-05-12 15:00:40 │ INFO     │   14.0  BNP.PA                ▲ +70.99%   0.7345
+2026-05-12 15:00:40 │ INFO     │   15.0  DHR                   ▲ +69.70%   0.7290
+2026-05-12 15:00:40 │ INFO     │   16.0  TT                    ▲ +65.02%   0.7091
+2026-05-12 15:00:40 │ INFO     │   17.0  MC.PA                 ▲ +61.90%   0.6958
+2026-05-12 15:00:40 │ INFO     │   18.0  HUBS                  ▲ +60.77%   0.6909
+2026-05-12 15:00:40 │ INFO     │   19.0  ODFL                  ▲ +60.37%   0.6893
+2026-05-12 15:00:40 │ INFO     │   20.0  BRK-B                 ▲ +58.44%   0.6810
+2026-05-12 15:00:40 │ INFO     │   21.0  BLK                   ▲ +57.90%   0.6787
+2026-05-12 15:00:40 │ INFO     │   22.0  KER.PA                ▲ +56.07%   0.6709
+2026-05-12 15:00:40 │ INFO     │   23.0  GS                    ▲ +55.64%   0.6691
+2026-05-12 15:00:40 │ INFO     │   24.0  WAT                   ▲ +53.97%   0.6620
+2026-05-12 15:00:40 │ INFO     │   25.0  RMS.PA                ▲ +53.63%   0.6606
+2026-05-12 15:00:40 │ INFO     │   26.0  JNJ                   ▲ +48.07%   0.6368
+2026-05-12 15:00:40 │ INFO     │   27.0  SAN.PA                ▲ +47.98%   0.6365
+2026-05-12 15:00:40 │ INFO     │   28.0  META                  ▲ +47.23%   0.6333
+2026-05-12 15:00:40 │ INFO     │   29.0  INGA.AS               ▲ +44.82%   0.6230
+2026-05-12 15:00:40 │ INFO     │   30.0  AAPL                  ▲ +44.29%   0.6207
+2026-05-12 15:00:40 │ INFO     │   31.0  AMZN                  ▲ +43.66%   0.6181
+2026-05-12 15:00:40 │ INFO     │   32.0  NESN.SW               ▲ +43.45%   0.6172
+2026-05-12 15:00:40 │ INFO     │   33.0  HSBC                  ▲ +42.97%   0.6151
+2026-05-12 15:00:40 │ INFO     │   34.0  RELIANCE.NS           ▲ +41.88%   0.6105
+2026-05-12 15:00:40 │ INFO     │   35.0  NVDA                  ▲ +35.71%   0.5842
+2026-05-12 15:00:40 │ INFO     │   36.0  MCD                   ▲ +32.52%   0.5706
+2026-05-12 15:00:40 │ INFO     │   37.0  SU.PA                 ▲ +29.02%   0.5557
+2026-05-12 15:00:40 │ INFO     │   38.0  JPM                   ▲ +28.24%   0.5524
+2026-05-12 15:00:40 │ INFO     │   39.0  ABBV                  ▲ +26.89%   0.5466
+2026-05-12 15:00:40 │ INFO     │   40.0  ALV.DE                ▲ +24.15%   0.5350
+2026-05-12 15:00:40 │ INFO     │   41.0  RNO.PA                ▲ +22.96%   0.5299
+2026-05-12 15:00:40 │ INFO     │   42.0  DIS                   ▲ +17.31%   0.5058
+2026-05-12 15:00:40 │ INFO     │   43.0  HD                    ▲ +16.85%   0.5039
+2026-05-12 15:00:40 │ INFO     │   44.0  PAYC                  ▲ +16.51%   0.5024
+2026-05-12 15:00:40 │ INFO     │   45.0  MRK                   ▲ +12.12%   0.4837
+2026-05-12 15:00:40 │ INFO     │   46.0  C                     ▲  +7.08%   0.4622
+2026-05-12 15:00:40 │ INFO     │   47.0  OR.PA                 ▲  +4.76%   0.4524
+2026-05-12 15:00:40 │ INFO     │   48.0  GOOGL                 ▲  +4.38%   0.4507
+2026-05-12 15:00:40 │ INFO     │   49.0  TSM                   ▲  +4.05%   0.4493
+2026-05-12 15:00:40 │ INFO     │   50.0  MS                    ▲  +2.75%   0.4438
+2026-05-12 15:00:40 │ INFO     │   51.0  PEP                   ▼  -1.54%   0.4255
+2026-05-12 15:00:40 │ INFO     │   52.0  ZAL.DE                ▼  -2.44%   0.4217
+2026-05-12 15:00:40 │ INFO     │   53.0  PG                    ▼  -2.47%   0.4216
+2026-05-12 15:00:40 │ INFO     │   54.0  SBUX                  ▼  -6.84%   0.4029
+2026-05-12 15:00:40 │ INFO     │   55.0  FAST                  ▼  -7.61%   0.3997
+2026-05-12 15:00:40 │ INFO     │   56.0  NOVN.SW               ▼ -11.83%   0.3817
+2026-05-12 15:00:40 │ INFO     │   57.0  UMI.BR                ▼ -13.26%   0.3756
+2026-05-12 15:00:40 │ INFO     │   58.0  KNEBV.HE              ▼ -15.27%   0.3670
+2026-05-12 15:00:40 │ INFO     │   59.0  EDEN.PA               ▼ -17.64%   0.3569
+2026-05-12 15:00:40 │ INFO     │   60.0  TCS.NS                ▼ -18.78%   0.3521
+2026-05-12 15:00:40 │ INFO     │   61.0  NKE                   ▼ -21.55%   0.3403
+2026-05-12 15:00:40 │ INFO     │   62.0  IEX                   ▼ -22.93%   0.3344
+2026-05-12 15:00:40 │ INFO     │   63.0  BABA                  ▼ -23.60%   0.3316
+2026-05-12 15:00:40 │ INFO     │   64.0  MSFT                  ▼ -31.24%   0.2990
+2026-05-12 15:00:40 │ INFO     │   65.0  PFE                   ▼ -31.81%   0.2966
+2026-05-12 15:00:40 │ INFO     │   66.0  BAS.DE                ▼ -35.72%   0.2799
+2026-05-12 15:00:40 │ INFO     │   67.0  AIR.PA                ▼ -37.77%   0.2712
+2026-05-12 15:00:40 │ INFO     │   68.0  SAP.DE                ▼ -39.41%   0.2642
+2026-05-12 15:00:40 │ INFO     │   69.0  AZN                   ▼ -41.01%   0.2574
+2026-05-12 15:00:40 │ INFO     │   70.0  KO                    ▼ -47.91%   0.2280
+2026-05-12 15:00:40 │ INFO     │   71.0  0700.HK               ▼ -56.41%   0.1918
+2026-05-12 15:00:40 │ INFO     │   72.0  INFY.NS               ▼ -56.52%   0.1913
+2026-05-12 15:00:40 │ INFO     │   73.0  ROG.SW                ▼ -77.96%   0.1000
+2026-05-12 15:00:40 │ INFO     │   74.0  TTE.PA                ▼ -86.25%   0.1000
+2026-05-12 15:00:40 │ INFO     │   75.0  UNH                   ▼ -107.20%   0.1000
+2026-05-12 15:00:40 │ INFO     │   76.0  JD                    ▼ -141.95%   0.1000
+2026-05-12 15:00:40 │ INFO     │   Actif                   R²(OOS)    OLS R²    F-pval  Pred/an
+2026-05-12 15:00:40 │ INFO     │   ──────────────────────────────────────────────────────────────
+2026-05-12 15:00:40 │ INFO     │   0700.HK                     n/a    0.0760   0.0000✓  -56.41%
+2026-05-12 15:00:40 │ INFO     │   AAPL                        n/a    0.1178   0.0000✓  +44.29%
+2026-05-12 15:00:40 │ INFO     │   ABBV                        n/a    0.0787   0.0000✓  +26.89%
+2026-05-12 15:00:40 │ INFO     │   AIR.PA                      n/a    0.0661   0.0000✓  -37.77%
+2026-05-12 15:00:40 │ INFO     │   ALV.DE                      n/a    0.0975   0.0000✓  +24.15%
+2026-05-12 15:00:40 │ INFO     │   AMZN                        n/a    0.0416   0.0000✓  +43.66%
+2026-05-12 15:00:40 │ INFO     │   ASML.AS                     n/a    0.0858   0.0000✓  +83.31%
+2026-05-12 15:00:40 │ INFO     │   AXP                         n/a    0.0555   0.0000✓  +133.32%
+2026-05-12 15:00:40 │ INFO     │   AZN                         n/a    0.1788   0.0000✓  -41.01%
+2026-05-12 15:00:40 │ INFO     │   BABA                        n/a    0.0725   0.0000✓  -23.60%
+2026-05-12 15:00:40 │ INFO     │   BAS.DE                      n/a    0.0935   0.0000✓  -35.72%
+2026-05-12 15:00:40 │ INFO     │   BLK                         n/a    0.1212   0.0000✓  +57.90%
+2026-05-12 15:00:40 │ INFO     │   BNP.PA                      n/a    0.0878   0.0000✓  +70.99%
+2026-05-12 15:00:40 │ INFO     │   BRK-B                       n/a    0.1269   0.0000✓  +58.44%
+2026-05-12 15:00:40 │ INFO     │   C                           n/a    0.0618   0.0000✓  +7.08%
+2026-05-12 15:00:40 │ INFO     │   CAP.PA                      n/a    0.1221   0.0000✓  +80.53%
+2026-05-12 15:00:40 │ INFO     │   DBK.DE                      n/a    0.1293   0.0000✓  +130.64%
+2026-05-12 15:00:40 │ INFO     │   DHR                         n/a    0.0829   0.0000✓  +69.70%
+2026-05-12 15:00:40 │ INFO     │   DIS                         n/a    0.0565   0.0000✓  +17.31%
+2026-05-12 15:00:40 │ INFO     │   EDEN.PA                     n/a    0.1468   0.0000✓  -17.64%
+2026-05-12 15:00:40 │ INFO     │   FAST                        n/a    0.1708   0.0000✓  -7.61%
+2026-05-12 15:00:40 │ INFO     │   GOOGL                       n/a    0.0421   0.0000✓  +4.38%
+2026-05-12 15:00:40 │ INFO     │   GS                          n/a    0.0975   0.0000✓  +55.64%
+2026-05-12 15:00:40 │ INFO     │   HD                          n/a    0.1262   0.0000✓  +16.85%
+2026-05-12 15:00:40 │ INFO     │   HDFCBANK.NS                 n/a    0.1090   0.0000✓  +117.94%
+2026-05-12 15:00:40 │ INFO     │   HSBC                        n/a    0.1091   0.0000✓  +42.97%
+2026-05-12 15:00:40 │ INFO     │   HUBS                        n/a    0.0959   0.0000✓  +60.77%
+2026-05-12 15:00:40 │ INFO     │   ICICIBANK.NS                n/a    0.1093   0.0000✓  +218.32%
+2026-05-12 15:00:40 │ INFO     │   IEX                         n/a    0.1653   0.0000✓  -22.93%
+2026-05-12 15:00:40 │ INFO     │   INFY.NS                     n/a    0.0861   0.0000✓  -56.52%
+2026-05-12 15:00:40 │ INFO     │   INGA.AS                     n/a    0.0938   0.0000✓  +44.82%
+2026-05-12 15:00:40 │ INFO     │   JD                          n/a    0.0677   0.0000✓  -141.95%
+2026-05-12 15:00:40 │ INFO     │   JNJ                         n/a    0.1033   0.0000✓  +48.07%
+2026-05-12 15:00:40 │ INFO     │   JPM                         n/a    0.0910   0.0000✓  +28.24%
+2026-05-12 15:00:40 │ INFO     │   KER.PA                      n/a    0.1508   0.0000✓  +56.07%
+2026-05-12 15:00:40 │ INFO     │   KNEBV.HE                    n/a    0.0532   0.0000✓  -15.27%
+2026-05-12 15:00:40 │ INFO     │   KO                          n/a    0.1351   0.0000✓  -47.91%
+2026-05-12 15:00:40 │ INFO     │   LULU                        n/a    0.0558   0.0000✓  +123.07%
+2026-05-12 15:00:40 │ INFO     │   MC.PA                       n/a    0.0922   0.0000✓  +61.90%
+2026-05-12 15:00:40 │ INFO     │   MCD                         n/a    0.1777   0.0000✓  +32.52%
+2026-05-12 15:00:40 │ INFO     │   META                        n/a    0.1092   0.0000✓  +47.23%
+2026-05-12 15:00:40 │ INFO     │   MRK                         n/a    0.1078   0.0000✓  +12.12%
+2026-05-12 15:00:40 │ INFO     │   MS                          n/a    0.1485   0.0000✓  +2.75%
+2026-05-12 15:00:40 │ INFO     │   MSFT                        n/a    0.0822   0.0000✓  -31.24%
+2026-05-12 15:00:40 │ INFO     │   NESN.SW                     n/a    0.0710   0.0000✓  +43.45%
+2026-05-12 15:00:40 │ INFO     │   NKE                         n/a    0.1442   0.0000✓  -21.55%
+2026-05-12 15:00:40 │ INFO     │   NOVN.SW                     n/a    0.1067   0.0000✓  -11.83%
+2026-05-12 15:00:40 │ INFO     │   NVDA                        n/a    0.0433   0.0000✓  +35.71%
+2026-05-12 15:00:40 │ INFO     │   NVS                         n/a    0.1138   0.0000✓  +111.65%
+2026-05-12 15:00:40 │ INFO     │   ODFL                        n/a    0.0598   0.0000✓  +60.37%
+2026-05-12 15:00:40 │ INFO     │   OR.PA                       n/a    0.0523   0.0000✓  +4.76%
+2026-05-12 15:00:40 │ INFO     │   PAYC                        n/a    0.1276   0.0000✓  +16.51%
+2026-05-12 15:00:40 │ INFO     │   PEP                         n/a    0.1407   0.0000✓  -1.54%
+2026-05-12 15:00:40 │ INFO     │   PFE                         n/a    0.1259   0.0000✓  -31.81%
+2026-05-12 15:00:40 │ INFO     │   PG                          n/a    0.1055   0.0000✓  -2.47%
+2026-05-12 15:00:40 │ INFO     │   RELIANCE.NS                 n/a    0.2922   0.0000✓  +41.88%
+2026-05-12 15:00:40 │ INFO     │   RMS.PA                      n/a    0.0282   0.0000✓  +53.63%
+2026-05-12 15:00:40 │ INFO     │   RNO.PA                      n/a    0.1090   0.0000✓  +22.96%
+2026-05-12 15:00:40 │ INFO     │   ROG.SW                      n/a    0.0510   0.0000✓  -77.96%
+2026-05-12 15:00:40 │ INFO     │   ROK                         n/a    0.1620   0.0000✓  +102.60%
+2026-05-12 15:00:40 │ INFO     │   SAN.PA                      n/a    0.1081   0.0000✓  +47.98%
+2026-05-12 15:00:40 │ INFO     │   SAP.DE                      n/a    0.0220   0.0000✓  -39.41%
+2026-05-12 15:00:40 │ INFO     │   SBUX                        n/a    0.1008   0.0000✓  -6.84%
+2026-05-12 15:00:40 │ INFO     │   SIE.DE                      n/a    0.0933   0.0000✓  +154.32%
+2026-05-12 15:00:40 │ INFO     │   SU.PA                       n/a    0.0760   0.0000✓  +29.02%
+2026-05-12 15:00:40 │ INFO     │   TCS.NS                      n/a    0.1230   0.0000✓  -18.78%
+2026-05-12 15:00:40 │ INFO     │   TMO                         n/a    0.0955   0.0000✓  +101.44%
+2026-05-12 15:00:40 │ INFO     │   TSM                         n/a    0.0690   0.0000✓  +4.05%
+2026-05-12 15:00:40 │ INFO     │   TT                          n/a    0.1066   0.0000✓  +65.02%
+2026-05-12 15:00:40 │ INFO     │   TTE.PA                      n/a    0.0844   0.0000✓  -86.25%
+2026-05-12 15:00:40 │ INFO     │   UMI.BR                      n/a    0.1059   0.0000✓  -13.26%
+2026-05-12 15:00:40 │ INFO     │   UNH                         n/a    0.1554   0.0000✓  -107.20%
+2026-05-12 15:00:40 │ INFO     │   V                           n/a    0.0891   0.0000✓  +87.47%
+2026-05-12 15:00:40 │ INFO     │   WAT                         n/a    0.0376   0.0000✓  +53.97%
+2026-05-12 15:00:40 │ INFO     │   WLN.PA                      n/a    0.0851   0.0000✓  +257.96%
+2026-05-12 15:00:40 │ INFO     │   ZAL.DE                      n/a    0.0534   0.0000✓  -2.44%
+2026-05-12 15:00:40 │ INFO     │ Etape 2/3 — Optimisation MaxDiv ML ...
+2026-05-12 15:00:41 │ INFO     │   MaxDiv ML  →  ret=+10.37%  vol=16.08%  sharpe= 0.521  DR=1.7385
+2026-05-12 15:00:41 │ INFO     │   Min Variance ...
+2026-05-12 15:00:41 │ INFO     │   Max Sharpe ...
+2026-05-12 15:00:42 │ INFO     │   Risk Parity ...
+2026-05-12 15:00:42 │ INFO     │   Black-Litterman ...
+2026-05-12 15:00:42 │ SUCCESS  │ Strategies classiques terminees
+2026-05-12 15:00:42 │ INFO     │   Min Variance            ret= +0.04%  vol= 0.66%  sharpe=-2.973
+2026-05-12 15:00:42 │ INFO     │   Max Sharpe              ret= +0.25%  vol= 3.01%  sharpe=-0.583
+2026-05-12 15:00:42 │ INFO     │   Risk Parity             ret= +0.06%  vol= 0.89%  sharpe=-2.196
+2026-05-12 15:00:42 │ INFO     │   Black-Litterman         ret= +1.13%  vol= 1.63%  sharpe=-0.537
+2026-05-12 15:00:42 │ INFO     │ Metriques comparatives :
+2026-05-12 15:00:42 │ INFO     │   Strategy            Annual Return      Annual Vol          Sharpe         Sortino    Max Drawdown          Calmar
+2026-05-12 15:00:42 │ INFO     │   ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+2026-05-12 15:00:42 │ INFO     │   Equal Weight               15.15%          15.45%           0.851           0.794         -32.17%           0.471
+2026-05-12 15:00:42 │ INFO     │   Min Variance               10.65%          10.45%           0.828           0.782         -24.49%           0.435
+2026-05-12 15:00:42 │ INFO     │   Max Sharpe                 62.35%          47.71%           1.265           1.349         -66.34%           0.940
+2026-05-12 15:00:42 │ INFO     │   Risk Parity                13.95%          14.06%           0.850           0.785         -30.44%           0.458
+2026-05-12 15:00:42 │ INFO     │   Black-Litterman            13.83%          25.82%           0.458           0.470         -37.14%           0.372
+2026-05-12 15:00:42 │ INFO     │   MaxDiv ML                  10.37%          16.08%           0.521           0.484         -35.52%           0.292
+2026-05-12 15:00:42 │ INFO     │   SPY                        13.02%          17.42%           0.633           0.613         -33.72%           0.386
+2026-05-12 15:00:42 │ INFO     │ Etape 3/3 — Graphiques ...
+2026-05-12 15:00:43 │ DEBUG    │ Graphique -> xgb_ranking.png
+2026-05-12 15:00:52 │ DEBUG    │ Graphique -> xgb_diagnostics.png
+2026-05-12 15:00:53 │ DEBUG    │ Graphique -> all_weights.png
+2026-05-12 15:00:54 │ DEBUG    │ Graphique -> ml_vs_classic_cumulative.png
+2026-05-12 15:00:54 │ DEBUG    │ Graphique -> ml_vs_classic_metrics.png
+2026-05-12 15:00:54 │ SUCCESS  │ Pipeline ML termine
+2026-05-12 15:00:54 │ SUCCESS  │ Termine — outputs dans C:\Eliott\154-capital\MEMOIRE\optimization\outputs
